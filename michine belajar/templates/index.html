@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediksi Performa CPU</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            background: #e9f7ef;
+            padding: 15px;
+            border-left: 5px solid #28a745;
+            font-size: 18px;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Masukkan Spesifikasi CPU</h2>
+        <form action="/predict" method="post">
+            <label>Cores:</label>
+            <input type="number" name="cores" required>
+
+            <label>Threads:</label>
+            <input type="number" name="threads" required>
+
+            <label>Base Clock (GHz):</label>
+            <input type="text" name="base_clock" required>
+
+            <label>TDP (Watt):</label>
+            <input type="text" name="tdp" required>
+
+            <button type="submit">Prediksi</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            <strong>Hasil Prediksi:</strong> {{ prediction }}
+        </div>
+        {% endif %}
+        {% if matched_data %}
+        <br><strong>Daftar Prosesor yang Cocok:</strong>
+        <table border="1px solid black" cellpadding="8" cellspacing="0" style="margin-top: 10px; width: 100%;">
+            <thead style="background-color: #007bff; color: white;">
+                <tr>
+                    <th>Nama</th>
+                    <th>Cores</th>
+                    <th>Threads</th>
+                    <th>Base Clock (GHz)</th>
+                    <th>TDP (W)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in matched_data %}
+                <tr>
+                    <td>{{ row['Name'] }}</td>
+                    <td>{{ row['Cores'] }}</td>
+                    <td>{{ row['Threads'] }}</td>
+                    <td>{{ row['Base Clock'] }}</td>
+                    <td>{{ row['TDP'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p><em>Tidak ada prosesor yang cocok ditemukan.</em></p>
+        {% endif %}
+
+
+        <a href="/data">Lihat Data Training & Testing</a>
+    </div>
+</body>
+</html>
